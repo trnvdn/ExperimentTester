@@ -1,6 +1,6 @@
-﻿namespace ExperimentTester.Models
+﻿namespace ExperimentTester.Models.Dto
 {
-    public class Participant
+    public class ParticipantDto
     {
         public Guid ParticipantID { get; set; }
         public Guid DeviceToken { get; set; }

@@ -1,6 +1,6 @@
-﻿namespace ExperimentTester.Models
+﻿namespace ExperimentTester.Models.Dto
 {
-    public class Experiment
+    public class ExperimentDto
     {
         public Guid ExperimentID { get; set; }
         public string Key { get; set; }
