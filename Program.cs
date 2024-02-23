@@ -5,6 +5,8 @@ using ExperimentTester.Repositories.IRepositories;
 using ExperimentTester.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using ExperimentTester.Services;
+using ExperimentTester.Services.IServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
 });
 
+
 // AutoMapper configuration
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -26,6 +29,9 @@ builder.Services.AddScoped<ApplicationDbContext>();
 builder.Services.AddScoped<IExperimentRepository, ExperimentRepository>();
 builder.Services.AddScoped<IParticipantRepository, ParticipantRepository>();
 builder.Services.AddScoped<IAssociationRepository, AssociationRepository>();
+builder.Services.AddScoped<IExperimentService, ExperimentService>();
+builder.Services.AddScoped<IParticipantService, ParticipantService>();
+builder.Services.AddScoped<IAssociationService, AssociationService>();
 
 builder.Services.AddLogging();
 
