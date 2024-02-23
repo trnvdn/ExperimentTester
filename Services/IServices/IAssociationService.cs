@@ -3,7 +3,7 @@ using ExperimentTester.Models.Dto;
 
 namespace ExperimentTester.Services.IServices
 {
-    public interface IAssotiationService
+    public interface IAssociationService
     {
         Task<bool> InsertAsync(Guid participantID, Guid experimentID);
         Task<List<ExperimentParticipantAssociationDto>> RetrieveAllAsync();

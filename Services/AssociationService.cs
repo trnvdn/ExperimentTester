@@ -6,7 +6,7 @@ using ExperimentTester.Services.IServices;
 
 namespace ExperimentTester.Services
 {
-    public class AssociationService : IAssotiationService
+    public class AssociationService : IAssociationService
     {
         private readonly IAssociationRepository _associationRepository;
         public AssociationService(IAssociationRepository associationRepository)

@@ -31,7 +31,7 @@ builder.Services.AddScoped<IParticipantRepository, ParticipantRepository>();
 builder.Services.AddScoped<IAssociationRepository, AssociationRepository>();
 builder.Services.AddScoped<IExperimentService, ExperimentService>();
 builder.Services.AddScoped<IParticipantService, ParticipantService>();
-builder.Services.AddScoped<IAssotiationService, AssociationService>();
+builder.Services.AddScoped<IAssociationService, AssociationService>();
 
 builder.Services.AddLogging();
 
