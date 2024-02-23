@@ -1,28 +1,80 @@
-﻿using ExperimentTester.Models.Dto;
+﻿using AutoMapper;
+using ExperimentTester.DatabaseContext;
+using ExperimentTester.Models;
+using ExperimentTester.Models.Dto;
 using ExperimentTester.Repositories.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExperimentTester.Repositories
 {
     public class ParticipantRepository : IParticipantRepository
     {
-        public Task<bool> AddParticipantAsync(ParticipantDto participantDto)
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly ILogger<AssociationRepository> _logger;
+        public ParticipantRepository(ApplicationDbContext context, IMapper mapper, ILogger<AssociationRepository> logger)
         {
-            throw new NotImplementedException();
+            _context = context;
+            _mapper = mapper;
+            _logger = logger;
+        }
+        public async Task<bool> AddParticipantAsync(ParticipantDto participantDto)
+        {
+            if(participantDto != null)
+            {
+                try
+                {
+                    await _context.Participants.AddAsync(_mapper.Map<Participant>(participantDto));
+                    return await _context.SaveChangesAsync() > 0;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    return false;
+                }
+            }
+            
+            _logger.LogError("AddParticipantAsync -> ParticipantDto is null");
+            return false;
         }
 
-        public Task<List<ParticipantDto>> GetAllParticipantsAsync()
+        public async Task<List<ParticipantDto>> GetAllParticipantsAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var participants = await _context.Participants.ToListAsync();
+
+                return _mapper.Map<List<ParticipantDto>>(participants);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return null;
+            }
         }
 
-        public Task<ParticipantDto> GetParticipantByDeviceTokenAsync(Guid deviceToken)
+        public async Task<ParticipantDto> GetParticipantByDeviceTokenAsync(Guid deviceToken)
         {
-            throw new NotImplementedException();
+            if(deviceToken != Guid.Empty)
+            {
+                var participant = await _context.Participants.FirstOrDefaultAsync(x => x.DeviceToken == deviceToken);
+                return _mapper.Map<ParticipantDto>(participant);
+            }
+
+            _logger.LogError("GetParticipantByDeviceTokenAsync -> DeviceToken is empty");
+            return null;
         }
 
-        public Task<ParticipantDto> GetParticipantByIdAsync(Guid id)
+        public async Task<ParticipantDto> GetParticipantByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            if (id != Guid.Empty)
+            {
+                var participant = await _context.Participants.FirstOrDefaultAsync(x => x.ParticipantID == id);
+                return _mapper.Map<ParticipantDto>(participant);
+            }
+
+            _logger.LogError("GetParticipantByDeviceTokenAsync -> DeviceToken is empty");
+            return null;
         }
     }
 }

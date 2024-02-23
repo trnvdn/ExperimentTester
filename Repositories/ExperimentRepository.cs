@@ -1,23 +1,70 @@
-﻿using ExperimentTester.Models.Dto;
+﻿using AutoMapper;
+using ExperimentTester.DatabaseContext;
+using ExperimentTester.Models;
+using ExperimentTester.Models.Dto;
 using ExperimentTester.Repositories.IRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExperimentTester.Repositories
 {
     public class ExperimentRepository : IExperimentRepository
     {
-        public Task<bool> AddExperimentAsync(ExperimentDto experimentDto)
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly ILogger<AssociationRepository> _logger;
+        public ExperimentRepository(ApplicationDbContext context, IMapper mapper, ILogger<AssociationRepository> logger)
         {
-            throw new NotImplementedException();
+            _context = context;
+            _mapper = mapper;
+            _logger = logger;
+        }
+        public async Task<bool> AddExperimentAsync(ExperimentDto experimentDto)
+        {
+            if(experimentDto != null)
+            {
+                try
+                {
+                    await _context.Experiments.AddAsync(_mapper.Map<Experiment>(experimentDto));
+                    return await _context.SaveChangesAsync() > 0;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    return false;
+                }
+            }
+
+            _logger.LogError("AddExperimentAsync -> ExperimentDto is null");
+            return false;
         }
 
-        public Task<List<ExperimentDto>> GetAllExperimentsAsync()
+        public async Task<List<ExperimentDto>> GetAllExperimentsAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var experiments = await _context.Experiments.ToListAsync();
+
+                return _mapper.Map<List<ExperimentDto>>(experiments);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return null;
+            }
         }
 
-        public Task<ExperimentDto> GetExperimentByParticipantIdAndKeyAsync(Guid id, string key)
+        public async Task<ExperimentDto> GetExperimentByParticipantIdAndKeyAsync(Guid id, string key)
         {
-            throw new NotImplementedException();
+            if(id != Guid.Empty && !string.IsNullOrEmpty(key))
+            {
+                var association = await _context.ExperimentParticipantAssociations.Where(x => x.ParticipantID == id)
+                    .Include(x => x.Experiment).FirstOrDefaultAsync(x => x.Experiment.Key == key);
+
+                return _mapper.Map<ExperimentDto>(association.Experiment);
+            }
+            
+            _logger.LogError("GetExperimentByParticipantIdAndKeyAsync -> ParticipantID or Key is null or empty");
+            return null;
         }
     }
 }
