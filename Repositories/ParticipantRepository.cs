@@ -20,22 +20,17 @@ namespace ExperimentTester.Repositories
         }
         public async Task<bool> AddParticipantAsync(ParticipantDto participantDto)
         {
-            if(participantDto != null)
+            try
             {
-                try
-                {
-                    await _context.Participants.AddAsync(_mapper.Map<Participant>(participantDto));
-                    return await _context.SaveChangesAsync() > 0;
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, ex.Message);
-                    return false;
-                }
+                await _context.Participants.AddAsync(_mapper.Map<Participant>(participantDto));
+                return await _context.SaveChangesAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return false;
             }
             
-            _logger.LogError("AddParticipantAsync -> ParticipantDto is null");
-            return false;
         }
 
         public async Task<List<ParticipantDto>> GetAllParticipantsAsync()

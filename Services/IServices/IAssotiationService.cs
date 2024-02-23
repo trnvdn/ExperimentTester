@@ -1,10 +1,11 @@
-﻿using ExperimentTester.Models.Dto;
+﻿using ExperimentTester.Models;
+using ExperimentTester.Models.Dto;
 
-namespace ExperimentTester.Repositories.IRepositories
+namespace ExperimentTester.Services.IServices
 {
-    public interface IAssociationRepository
+    public interface IAssotiationService
     {
-        Task<bool> InsertAssociation(Guid participantId, Guid experimentId);
+        Task<bool> InsertAsync(Guid participantID, Guid experimentID);
         Task<List<ExperimentParticipantAssociationDto>> RetrieveAllAsync();
         Task<List<ExperimentParticipantAssociationDto>> RetrieveByParticipantAsync(Guid participantID);
         Task<ExperimentParticipantAssociationDto> RetrieveByExperimentAsync(Guid experimentID);
