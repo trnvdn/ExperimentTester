@@ -6,5 +6,7 @@
         public string Key { get; set; }
         public string? Value { get; set; }
         public int DistributionPercentage { get; set; }
+
+        public ICollection<ExperimentParticipantAssociation> ExperimentParticipantAssociations { get; set; }
     }
 }

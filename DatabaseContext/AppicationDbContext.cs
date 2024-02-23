@@ -16,16 +16,16 @@ namespace ExperimentTester.DatabaseContext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ExperimentParticipantAssociation>()
-                .HasKey(epa => epa.AssociationID); 
+                .HasKey(epa => epa.AssociationID);
 
             modelBuilder.Entity<ExperimentParticipantAssociation>()
-                .HasOne<Experiment>() 
-                .WithMany(e => ExperimentParticipantAssociations) 
+                .HasOne(epa => epa.Experiment) 
+                .WithMany(e => e.ExperimentParticipantAssociations) 
                 .HasForeignKey(epa => epa.ExperimentID);
 
             modelBuilder.Entity<ExperimentParticipantAssociation>()
-                .HasOne<Participant>() 
-                .WithMany(p => ExperimentParticipantAssociations)
+                .HasOne(epa => epa.Participant) 
+                .WithMany(p => p.ExperimentParticipantAssociations) 
                 .HasForeignKey(epa => epa.ParticipantID);
         }
     }

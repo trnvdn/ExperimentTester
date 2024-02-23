@@ -1,8 +1,35 @@
+using AutoMapper;
+using ExperimentTester;
+using ExperimentTester.DatabaseContext;
+using ExperimentTester.Repositories.IRepositories;
+using ExperimentTester.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString"));
+});
+
+// AutoMapper configuration
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+
+// Repositories registration
+builder.Services.AddScoped<ApplicationDbContext>();
+
+builder.Services.AddScoped<IExperimentRepository, ExperimentRepository>();
+builder.Services.AddScoped<IParticipantRepository, ParticipantRepository>();
+builder.Services.AddScoped<IAssociationRepository, AssociationRepository>();
+
+builder.Services.AddLogging();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
