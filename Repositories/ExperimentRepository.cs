@@ -11,8 +11,8 @@ namespace ExperimentTester.Repositories
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        private readonly ILogger<AssociationRepository> _logger;
-        public ExperimentRepository(ApplicationDbContext context, IMapper mapper, ILogger<AssociationRepository> logger)
+        private readonly ILogger<ExperimentRepository> _logger;
+        public ExperimentRepository(ApplicationDbContext context, IMapper mapper, ILogger<ExperimentRepository> logger)
         {
             _context = context;
             _mapper = mapper;
