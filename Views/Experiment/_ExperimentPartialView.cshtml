@@ -1,0 +1,18 @@
+﻿@model IEnumerable<ExperimentResult>
+
+@if (Model.Any())
+{
+    @if(Model.Any())
+    {
+        <br />
+        <h2>@(Model.First().Key == "button_color" ? "Button color" : "Price") experiment results</h2>
+        @foreach (var result in Model)
+        {
+            <div>
+                <p>Result: @result.Value</p>
+            </div>
+        }
+        <br />
+    }
+    
+}

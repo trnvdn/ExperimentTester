@@ -4,6 +4,7 @@ namespace ExperimentTester.Services.IServices
 {
     public interface IExperimentHandlerService
     {
-        Task<ExperimentResult> RunExperiment(Guid deviceToken, string xName);
+        Task<List<ExperimentResult>> RunExperiment(string xName, Guid deviceToken);
+        Task<List<ExperimentResult>> RunExperiments(string xName, int count);
     }
 }

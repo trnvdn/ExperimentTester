@@ -29,12 +29,12 @@ namespace ExperimentTester.Repositories
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, ex.Message);
+                    _logger.LogError($"{nameof(this.MemberwiseClone)} {ex.Message}");
                     return false;
                 }
             }
 
-            _logger.LogError("AddExperimentAsync -> ExperimentDto is null");
+            _logger.LogError($"{nameof(this.MemberwiseClone)} ExperimentDto is null");
             return false;
         }
 
@@ -48,7 +48,7 @@ namespace ExperimentTester.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError($"{nameof(this.MemberwiseClone)} ex.Message");
                 return null;
             }
         }
@@ -57,13 +57,26 @@ namespace ExperimentTester.Repositories
         {
             if(id != Guid.Empty && !string.IsNullOrEmpty(key))
             {
-                var association = await _context.ExperimentParticipantAssociations.Where(x => x.ParticipantID == id)
+                try
+                {
+                    var association = await _context.ExperimentParticipantAssociations.Where(x => x.ParticipantID == id)
                     .Include(x => x.Experiment).FirstOrDefaultAsync(x => x.Experiment.Key == key);
 
-                return _mapper.Map<ExperimentDto>(association.Experiment);
+                    if (association != null)
+                    {
+                        return _mapper.Map<ExperimentDto>(association.Experiment);
+                    }
+
+                    return null;
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError($"{nameof(this.MemberwiseClone)} {ex.Message}");
+                    return null;
+                }
             }
             
-            _logger.LogError("GetExperimentByParticipantIdAndKeyAsync -> ParticipantID or Key is null or empty");
+            _logger.LogError($"{nameof(this.MemberwiseClone)} ParticipantID or Key is null or empty");
             return null;
         }
     }

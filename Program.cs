@@ -4,7 +4,6 @@ using ExperimentTester.DatabaseContext;
 using ExperimentTester.Repositories.IRepositories;
 using ExperimentTester.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 using ExperimentTester.Services;
 using ExperimentTester.Services.IServices;
 
@@ -33,6 +32,8 @@ builder.Services.AddScoped<IExperimentService, ExperimentService>();
 builder.Services.AddScoped<IParticipantService, ParticipantService>();
 builder.Services.AddScoped<IAssociationService, AssociationService>();
 
+builder.Services.AddScoped<IExperimentHandlerService, ExperimentHandlerService>();
+
 builder.Services.AddLogging();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -41,7 +42,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Experiment/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -55,6 +56,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=experiment}/{action=Index}/{id?}");
 
 app.Run();

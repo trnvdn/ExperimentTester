@@ -4,7 +4,6 @@ using ExperimentTester.Models;
 using ExperimentTester.Models.Dto;
 using ExperimentTester.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileSystemGlobbing.Internal.PathSegments;
 
 namespace ExperimentTester.Repositories
 {
@@ -35,12 +34,12 @@ namespace ExperimentTester.Repositories
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, ex.Message);
+                    _logger.LogError($"{nameof(this.MemberwiseClone)} {ex.Message}");
                     return false;
                 }
             }
 
-            _logger.LogError("InsertAssociation -> ParticipantID or ExperimentID is empty");
+            _logger.LogError($"{nameof(this.MemberwiseClone)} ParticipantID or ExperimentID is empty");
             return false;
         }
 
@@ -49,12 +48,12 @@ namespace ExperimentTester.Repositories
             try
             {
                 var associations = await _context.ExperimentParticipantAssociations.ToListAsync();
-                
+
                 return _mapper.Map<List<ExperimentParticipantAssociationDto>>(associations);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError($"{nameof(this.MemberwiseClone)} {ex.Message}");
                 return null;
             }
         }
@@ -70,12 +69,12 @@ namespace ExperimentTester.Repositories
                 }
                 catch(Exception ex)
                 {
-                    _logger.LogError(ex.Message);
+                    _logger.LogError($"{nameof(this.MemberwiseClone)} {ex.Message}");
                     return null;
                 }
             }
 
-            _logger.LogError("RetrieveByParticipantAsync -> ParticipantID is empty");
+            _logger.LogError($"{nameof(this.MemberwiseClone)} ParticipantID is empty");
             return null;
         }
         public async Task<ExperimentParticipantAssociationDto> RetrieveByExperimentAsync(Guid experimentID)
@@ -86,7 +85,7 @@ namespace ExperimentTester.Repositories
                 return _mapper.Map<ExperimentParticipantAssociationDto>(experiment);
             }
 
-            _logger.LogError("RetrieveByExperimentAsync -> ExperimentID is empty");
+            _logger.LogError($"{nameof(this.MemberwiseClone)} ExperimentID is empty");
             return null;
         }
     }

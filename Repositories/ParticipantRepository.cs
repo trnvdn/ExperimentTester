@@ -27,7 +27,7 @@ namespace ExperimentTester.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError($"{nameof(this.MemberwiseClone)} {ex.Message}");
                 return false;
             }
             
@@ -43,7 +43,7 @@ namespace ExperimentTester.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message);
+                _logger.LogError($"{nameof(this.MemberwiseClone)} {ex.Message}");
                 return null;
             }
         }
@@ -52,11 +52,19 @@ namespace ExperimentTester.Repositories
         {
             if(deviceToken != Guid.Empty)
             {
-                var participant = await _context.Participants.FirstOrDefaultAsync(x => x.DeviceToken == deviceToken);
-                return _mapper.Map<ParticipantDto>(participant);
+                try
+                {
+                    var participant = await _context.Participants.FirstOrDefaultAsync(x => x.DeviceToken == deviceToken);
+                    return _mapper.Map<ParticipantDto>(participant);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"{nameof(this.MemberwiseClone)} {ex.Message}");
+                    return null;
+                }
             }
 
-            _logger.LogError("GetParticipantByDeviceTokenAsync -> DeviceToken is empty");
+            _logger.LogError($"{nameof(this.MemberwiseClone)} DeviceToken is empty");
             return null;
         }
 
@@ -68,7 +76,7 @@ namespace ExperimentTester.Repositories
                 return _mapper.Map<ParticipantDto>(participant);
             }
 
-            _logger.LogError("GetParticipantByDeviceTokenAsync -> DeviceToken is empty");
+            _logger.LogError($"{nameof(this.MemberwiseClone)} DeviceToken is empty");
             return null;
         }
     }
