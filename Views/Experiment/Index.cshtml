@@ -1,0 +1,111 @@
+﻿@model IEnumerable<ExperimentResult>
+@{
+    ViewData["Title"] = "Experiment";
+}
+
+<div class="form-group mx-auto" style="width: 40%;">
+    <label for="ExperimentName" class="control-label">Experiment Name:</label>
+    <select id="ExperimentName" class="form-control">
+        <option value="button_color">Button color experiment</option>
+        <option value="price">Price experiment</option>
+    </select>
+    <label id="TokenLabel" for="DeviceToken" class="control-label">Device Token:</label>
+    <div class="input-group">
+        <input type="text" id="DeviceToken" class="form-control" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+        <div id="TokenValidationButton" class="input-group-append">
+            <button type="button" class="btn btn-primary" onclick="validateDeviceToken()" style="width: 100%">Validate</button>
+        </div>
+    </div>
+    <div id="validationMessage"></div>
+    <label id="ExecutionsLabel" for="Executions" class="control-label">Number of Executions:</label>
+    <input type="number" id="Executions" class="form-control" min="1" />
+    <br />
+    <button type="button" class="btn btn-primary mx-auto" onclick="conductExperiment()" style="width: 100%">Conduct Experiment</button>
+</div>
+
+
+
+
+
+<div id="Result"></div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#DeviceToken").on("input", function () {
+            if ($(this).val()) {
+                $("#Executions").val("1");
+                $("#Executions").hide();
+                $("#ExecutionsLabel").hide();
+            } else {
+                $("#Executions").show();
+                $("#ExecutionsLabel").show();
+            }
+        });
+
+        $("#Executions").on("input", function () {
+            if ($(this).val()) {
+                $("#DeviceToken").val("");
+                $("#DeviceToken").hide();
+                $("#TokenLabel").hide();
+                $("#TokenValidationButton").hide();
+            } else {
+                $("#DeviceToken").show();
+                $("#TokenLabel").show();
+                $("#TokenValidationButton").show();
+            }
+        });
+    });
+
+    function validateDeviceToken() {
+        var deviceToken = $("#DeviceToken").val();
+        var pattern = /^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$/i;
+        if (pattern.test(deviceToken)) {
+            $("#validationMessage").text("Device Token is valid.");
+        } else {
+            $("#validationMessage").text("Invalid Device Token format. Please enter a valid Device Token.");
+        }
+    }
+
+    function conductExperiment() {
+        var experimentName = $("#ExperimentName").val();
+        var deviceToken = $("#DeviceToken").val();
+        var executions = $("#Executions").val();
+        if (!deviceToken && !executions) {
+            console.error("Please specify either Device Token or Number of Executions.");
+            return;
+        }
+        if (deviceToken != '' && executions == '1') {
+            $.ajax({
+                url: `/experiment/${experimentName}/${deviceToken}`,
+                type: "POST",
+                data: {
+                    deviceToken: deviceToken,
+                    experimentName: experimentName
+                },
+                success: function (result) {
+                    $("#Result").html(result); 
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+        else {
+            $.ajax({
+                url: `/experiment/multiple/${experimentName}/${executions}`,
+                type: "POST",
+                data: {
+                    experimentName: experimentName,
+                    executions: executions
+                },
+                success: function (result) {
+                    $("#Result").html(result); 
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    }
+</script>

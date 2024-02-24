@@ -18,17 +18,42 @@ namespace ExperimentTester.Services
             _associationService = associationService;
         }
 
-        public async Task<ExperimentResult> RunExperiment(Guid deviceToken, string xName)
+        public async Task<List<ExperimentResult>> RunExperiment(string xName, Guid deviceToken)
         {
-            var participant = await getParticipantByToken(deviceToken) ?? await insertParticipant(deviceToken);
+            var tokensList = new List<Guid>() { deviceToken };
 
-            var experiment = await getExperimentByIdAndKey(participant.ParticipantID, xName) ?? await insertExperiment(participant, xName);
+            return await runExperiments(xName,tokensList);
+        }
 
-            return new ExperimentResult
+        public async Task<List<ExperimentResult>> RunExperiments(string xName, int count)
+        {
+            var tokensList = new List<Guid>();
+            for (int i = 0; i < count; i++)
             {
-                Key = experiment.Key,
-                Value = experiment.Value
-            };
+                tokensList.Add(Guid.NewGuid());
+            }
+
+            return await runExperiments(xName, tokensList);
+        }
+
+        private async Task<List<ExperimentResult>> runExperiments(string xName, List<Guid> deviceTokens)
+        {
+            var results = new List<ExperimentResult>();
+            for (int i = 0; i < deviceTokens.Count; i++)
+            {
+                var currentToken = deviceTokens[i];
+                var participant = await getParticipantByToken(currentToken) ?? await insertParticipant(currentToken);
+
+                var experiment = await getExperimentByIdAndKey(participant.ParticipantID, xName) ?? await insertExperiment(participant, xName);
+
+                var exp = new ExperimentResult
+                {
+                    Key = experiment.Key,
+                    Value = experiment.Value
+                };
+                results.Add(exp);
+            }
+            return results;
         }
 
         private async Task<ParticipantDto> getParticipantByToken(Guid deviceToken)
@@ -99,10 +124,22 @@ namespace ExperimentTester.Services
 
                 _distributionPercentage = randomPercent;
 
-                if (randomPercent <= 75) return prices[0];
-                else if (randomPercent <= 85) return prices[1];
-                else if (randomPercent <= 95) return prices[2];
-                else return prices[3];
+                if (randomPercent < 75)
+                {
+                    return prices[0];
+                }
+                else if (randomPercent < 85)
+                {
+                    return prices[1];
+                }
+                else if (randomPercent < 95)
+                {
+                    return prices[2];
+                }
+                else
+                {
+                    return prices[3];
+                }
             }
             else
             {
