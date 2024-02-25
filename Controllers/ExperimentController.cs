@@ -21,7 +21,7 @@
             }
 
             [HttpPost("experiment/multiple/{xName}/{count}")]
-            public async Task<IActionResult> GetButtonColorExperiments(string xName, int count)
+            public async Task<IActionResult> GetMultipleExperimentResult(string xName, int count)
             {
                 var result = new List<ExperimentResult>();
                 try
@@ -30,13 +30,13 @@
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"{nameof(GetButtonColorExperiments)} {ex.Message}");
+                    _logger.LogError($"{nameof(GetMultipleExperimentResult)} {ex.Message}");
                 }
                 return PartialView("_ExperimentPartialView", result);
             }
 
             [HttpPost("experiment/{xName}/{deviceToken}")]
-            public async Task<IActionResult> GetButtonColorExperiments(string xName, Guid deviceToken)
+            public async Task<IActionResult> GetExperimentResult(string xName, Guid deviceToken)
             {
                 var result = new List<ExperimentResult>();
                 try
@@ -45,7 +45,7 @@
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError($"{nameof(GetButtonColorExperiments)} {ex.Message}");
+                    _logger.LogError($"{nameof(GetExperimentResult)} {ex.Message}");
                 }
                 return PartialView("_ExperimentPartialView", result);
             }
