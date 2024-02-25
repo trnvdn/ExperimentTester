@@ -1,11 +1,8 @@
 ﻿using ExperimentTester.DatabaseContext;
 using ExperimentTester.Models;
-using ExperimentTester.Models.ViewModels;
 using ExperimentTester.Services.IServices;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using System.Runtime.InteropServices;
 
 namespace ExperimentTester.Services
 {
@@ -114,7 +111,7 @@ namespace ExperimentTester.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{this.GetType().Name} -> {ex.Message}");
+                _logger.LogError($"{GetType().Name} -> {ex.Message}");
             }
         }
 

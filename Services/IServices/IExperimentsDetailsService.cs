@@ -1,5 +1,4 @@
 ﻿using ExperimentTester.Models;
-using ExperimentTester.Models.ViewModels;
 
 namespace ExperimentTester.Services.IServices
 {
