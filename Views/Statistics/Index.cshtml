@@ -1,0 +1,102 @@
+﻿@using ExperimentTester.Models.ViewModels
+
+@model ExperimentStatisticsViewModel
+
+@{
+    ViewBag.Title = "Statistics";
+}
+
+@if (Model.ButtonExperiment.Any() || Model.PriceExperiment.Any())
+{
+    <div class="row justify-content-center text-center">
+        <h2>Experiments</h2>
+        <form action="/Statistics/DeleteAllData" method="post">
+            <button type="submit" class="btn btn-danger">Delete all data</button>
+        </form>
+    </div>
+    <br />
+    <div class="row justify-content-center text-center">
+        <div class="col-md-6">
+            <h3>Total distributions</h3>
+            <table class="table table-bordered table-responsive-md">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Experiment name</th>
+                        <th style="white-space: nowrap;">Option</th>
+                        <th style="white-space: nowrap;">Distribution</th>
+                        <th style="white-space: nowrap;">Distribution percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.DistributionStats)
+                    {
+                        <tr>
+                            <td style="white-space: nowrap;">@item.ExperimentName</td>
+                            <td style="white-space: nowrap;">@item.Option</td>
+                            <td style="white-space: nowrap;">@item.OptionDistribution</td>
+                            <td style="white-space: nowrap;">@item.DistributionPercentage%</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row justify-content-center text-center">
+        <div class="col-md-6">
+            <h3>Button experiment</h3>
+            <table class="table table-bordered table-responsive-md">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Participant ID</th>
+                        <th style="white-space: nowrap;">Device token</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.ButtonExperiment)
+                    {
+                        <tr>
+                            <td style="white-space: nowrap;">@item.ParticipantID</td>
+                            <td style="white-space: nowrap;">@item.DeviceToken</td>
+                            <td>@item.Value</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="row justify-content-center text-center">
+        <div class="col-md-6">
+            <h3>Price experiment</h3>
+            <table class="table table-bordered table-responsive-md">
+                <thead>
+                    <tr>
+                        <th style="white-space: nowrap;">Participant ID</th>
+                        <th style="white-space: nowrap;">Device token</th>
+                        <th>Value</th>
+                        <th>Distribution percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.PriceExperiment)
+                    {
+                        <tr>
+                            <td style="white-space: nowrap;">@item.ParticipantID</td>
+                            <td style="white-space: nowrap;">@item.DeviceToken</td>
+                            <td>@item.Value</td>
+                            <td>@item.DistributionPercentage</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-center">No experiments have been run yet.</p>
+}

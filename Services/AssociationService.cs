@@ -1,6 +1,4 @@
-﻿using ExperimentTester.DatabaseContext;
-using ExperimentTester.Models;
-using ExperimentTester.Models.Dto;
+﻿using ExperimentTester.Models.Dto;
 using ExperimentTester.Repositories.IRepositories;
 using ExperimentTester.Services.IServices;
 

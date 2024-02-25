@@ -12,9 +12,16 @@ namespace ExperimentTester.DatabaseContext
         public DbSet<Experiment> Experiments { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<ExperimentParticipantAssociation> ExperimentParticipantAssociations { get; set; }
+        public DbSet<ExperimentDetails> ExperimentDetails { get; set; }
+        public DbSet<DeviceTokenDistribution> DeviceTokenDistributions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ExperimentDetails>().HasNoKey();
+            modelBuilder.Entity<DeviceTokenDistribution>().HasNoKey();
+
             modelBuilder.Entity<ExperimentParticipantAssociation>()
                 .HasKey(epa => epa.AssociationID);
 
