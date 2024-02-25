@@ -48,7 +48,7 @@ namespace ExperimentTester.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError($"{nameof(this.MemberwiseClone)} ex.Message");
+                _logger.LogError($"{nameof(this.MemberwiseClone)} {ex.Message}");
                 return null;
             }
         }

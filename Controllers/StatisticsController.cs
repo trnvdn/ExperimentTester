@@ -17,6 +17,7 @@ namespace ExperimentTester.Controllers
         {
             _experimentStatisticsViewModel.ButtonExperiment = await _experimentsDetailsService.GetExperimentsDetailsAsync("button_color");
             _experimentStatisticsViewModel.PriceExperiment = await _experimentsDetailsService.GetExperimentsDetailsAsync("price");
+            _experimentStatisticsViewModel.DistributionStats = _experimentsDetailsService.DeviceTokenDistribution(); 
 
             return View(_experimentStatisticsViewModel);
         }
