@@ -45,7 +45,7 @@ ExperimentID (Foreign key to Experiment table) <br>
 ParticipantID (Foreign key to Participant table) <br>
 
 # Setup
-Clone the repository from GitHub: link-to-your-repo.<br>
+Clone the repository from GitHub: https://github.com/trnvdn/ExperimentTester
 Open the solution in Visual Studio.<br>
 Configure the database connection string in the appsettings.json file.<br>
 Run the migrations : Update-Database<br>
